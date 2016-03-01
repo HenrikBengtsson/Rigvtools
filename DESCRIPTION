@@ -1,0 +1,13 @@
+Package: Rigvtools
+Version: 0.0.1
+Title: An R API for igvtools
+Imports:
+    rJava
+Authors@R: c(person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
+                                          email = "henrikb@braju.com"))
+Description: A R API for igvtools.
+License: MIT + file LICENSE
+LazyLoad: TRUE
+URL: https://github.com/HenrikBengtsson/Rigvtools
+BugReports: https://github.com/HenrikBengtsson/Rigvtools/issues
+RoxygenNote: 5.0.1

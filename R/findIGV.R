@@ -1,7 +1,20 @@
-#' Locates the igvtools.jar or igv.jar file
+#' Initiate the Java IGV library
 #'
-#' @return The pathname to the igvtools.jar or igv.jar file
+#' @return The pathname to the igvtools.jar or igv.jar file used.
 #'
+#' @aliases findIGV
+#' @export
+#' @importFrom utils file_test
+initIGV <- function() {
+  pathname <- findIGV()
+  if (!file_test("-f", pathname)) {
+    stop("Failed to located igvtools.jar or igv.jar. See help('initIGV').")
+  }
+  rJava::.jaddClassPath(pathname)
+
+  invisible(pathname)
+}
+
 #' @export
 #' @importFrom utils file_test
 findIGV <- function() {

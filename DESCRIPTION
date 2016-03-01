@@ -1,7 +1,7 @@
 Package: Rigvtools
 Version: 0.0.1
 Title: An R API for igvtools
-Imports:
+Suggests:
     rJava
 Authors@R: c(person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
                                           email = "henrikb@braju.com"))

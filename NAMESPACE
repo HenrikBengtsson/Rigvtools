@@ -2,5 +2,6 @@
 
 export(TDFUtils)
 export(findIGV)
+export(findIGVTools)
 export(initIGV)
 importFrom(utils,file_test)

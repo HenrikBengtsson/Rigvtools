@@ -2,6 +2,7 @@
 % Please edit documentation in R/initIGV.R
 \name{initIGV}
 \alias{findIGV}
+\alias{findIGVTools}
 \alias{initIGV}
 \title{Initiate the Java IGV library}
 \usage{

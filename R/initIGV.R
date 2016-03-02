@@ -2,11 +2,12 @@
 #'
 #' @return The pathname to the igvtools.jar or igv.jar file used.
 #'
-#' @aliases findIGV
+#' @aliases findIGV findIGVTools
 #' @export
 #' @importFrom utils file_test
 initIGV <- function() {
-  pathname <- findIGV()
+  pathnames <- c(findIGVTools(), findIGV())
+  pathname <- pathnames[!is.na(pathnames)][1]
   if (!file_test("-f", pathname)) {
     stop("Failed to located igvtools.jar or igv.jar. See help('initIGV').")
   }
@@ -17,42 +18,27 @@ initIGV <- function() {
 
 #' @export
 #' @importFrom utils file_test
-findIGV <- function() {
+findIGVTools <- function() {
   ## Locate igvtools.jar
-  pathname <- Sys.which("igvtools.jar")
-  if (file_test("-f", pathname)) return(pathname)
+  paths <- c(Sys.getenv("IGVTOOLS_HOME"),
+             dirname(Sys.which(c("igvtools.jar", "igvtools", "igvtools.bat"))))
+  paths <- unique(paths[file_test("-d", paths)])
+  pathnames <- file.path(paths, "igvtools.jar")
+  pathnames <- pathnames[file_test("-f", pathnames)]
+  if (length(pathnames) > 0) return(pathnames[1])
 
-  path <- Sys.getenv("IGVTOOLS_HOME", NA_character_)
-  if (file_test("-d", path)) {
-    pathname <- file.path(path, "igvtools.jar")
-    if (file_test("-f", pathname)) return(pathname)
-  }
+  NA_character_
+}
 
-  ## Locate igv.jar
-  pathname <- Sys.which("igv.jar")
-  if (file_test("-f", pathname)) return(pathname)
-
-  path <- Sys.getenv("IGV_HOME", NA_character_)
-  if (file_test("-d", path)) {
-    pathname <- file.path(path, "igv.jar")
-    if (file_test("-f", pathname)) return(pathname)
-  }
-
-  if (.Platform$OS.type == "windows") {
-    path <- file.path(Sys.getenv("PROGRAMFILES"), "BroadInstitute")
-    if (!file_test("-d", path)) {
-      path <- file.path(Sys.getenv("PROGRAMFILES(x86)"), "BroadInstitute")
-    }
-    if (file_test("-d", path)) {
-      dirs <- list.files(path=path, pattern="^IGV_")
-      paths <- file.path(path, dirs)
-      paths <- paths[file_test("-d", paths)]
-      paths <- sort(paths, decreasing=TRUE)
-      path <- paths[1L]
-      pathname <- file.path(path, "igv.jar")
-      if (file_test("-f", pathname)) return(pathname)
-    }
-  }
+#' @export
+#' @importFrom utils file_test
+findIGV <- function() {
+  paths <- c(Sys.getenv("IGV_HOME"),
+             dirname(Sys.which(c("igv.jar", "igv.sh", "igv.bat", "igv.command"))))
+  paths <- unique(paths[file_test("-d", paths)])
+  pathnames <- file.path(paths, "igv.jar")
+  pathnames <- pathnames[file_test("-f", pathnames)]
+  if (length(pathnames) > 0) return(pathnames[1])
 
   NA_character_
 }
